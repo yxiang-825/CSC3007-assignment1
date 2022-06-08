@@ -1,0 +1,142 @@
+<!doctype html>
+<html>
+<head>
+<title>Assignment 1</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<style>
+#PSITable {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#PSITable td, #PSITable th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#PSITable tr:nth-child(even){background-color: #f2f2f2;}
+
+#PSITable tr:hover {background-color: #ddd;}
+
+#PSITable th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #4CAF50;
+  color: white;
+}
+over{
+	background-color:red;
+}
+</style>
+</head>
+<body>
+<div id="main">
+            
+        </div>
+
+<h2>Singapore PSI Reading</h2>
+<table id="PSITable">
+	
+    <tr>
+		
+        <th>Metric</th>
+        <th>National</th>
+        <th>Central</th>
+		<th>West</th>
+        <th>East</th>
+        <th>North</th>
+		<th>South</th>
+    </tr>
+</table>
+
+
+<script>
+var z = 0;
+var metric =[];
+var national =[];
+var central = [];
+var west = [];
+var east= [];
+var north = [];
+var south = [];
+fetch("https://api.data.gov.sg/v1/environment/psi")
+  .then(response => response.json())
+  .then(data => {
+   
+	let readings = data.items[0].readings
+	let readings_keys = Object.keys(readings);
+	let total =readings_keys.length;	
+	readings_keys.forEach(keys =>{
+	
+	var count= {};
+	element = readings[keys];
+
+
+	 metric[z] = keys;
+	 
+	 national[z] = element.national;
+	 
+	 central[z] = element.central;
+	 
+	 west[z] = element.west;
+	
+	 east[z] = element.east;
+	
+	 north[z] = element.north;
+	
+	 south[z] = element.south;
+	 
+	 
+		var tbl=$("<table/>").attr("id","PSITable");
+		$("main").append(tbl);
+		
+		
+		
+        var tr=" <tr>";
+		var td1="<td>"+metric[z]+"</td>";
+        var td2="<td>"+national[z]+"</td>";
+        var td3="<td>"+central[z]+"</td>";
+        var td4="<td>"+west[z]+"</td>";
+		var td5="<td>"+east[z]+"</td>";
+		var td6="<td>"+north[z]+"</td>";
+		var td7="<td>"+south[z]+"</td>";
+		
+		
+		
+		
+       $("#PSITable").append(tr+td1+td2+td3+td4+td5+td6+td7); 
+
+	
+		
+	});
+	
+	let datetime = data.items[0].update_timestamp;	
+	
+	const formatDate = (test) => {
+	  const options = { year: "numeric", month: "long", day: "numeric" }
+	  return new Date(test).toLocaleDateString(undefined, options)
+	  }
+	  const formatTime = (test) => {
+	  return new Date(test).toLocaleTimeString(undefined)
+	  }
+	
+	let date = formatDate(datetime)
+	let time = formatTime(datetime)
+	var tr1="<tr>";
+	var tdtest = "<th colspan='7' style='text-align: center';>" +time+" "+date+"</th>";
+	
+	$("#PSITable").prepend(tr1+tdtest); 
+	
+  
+  
+  <!-- console.log(formatDate(test)) -->
+  <!-- console.log(formatTime(test)) -->
+  <!-- console.log(test) -->
+  });
+
+</script>
+
+</body>
+</html>
