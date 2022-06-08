@@ -67,8 +67,11 @@ fetch("https://api.data.gov.sg/v1/environment/psi")
    
 	let api_data = data.items[0].readings
 	let api_metric_key = Object.keys(api_data);
-	let total =api_metric_key.length;	
+	
+	
+	console.log(data.items[0].readings)
 	api_metric_key.forEach(keys =>{
+	
 	
 	var count= {};
 	element = api_data[keys];
